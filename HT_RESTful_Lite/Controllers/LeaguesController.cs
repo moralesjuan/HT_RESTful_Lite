@@ -23,5 +23,23 @@ namespace HT_RESTful_Lite.Controllers
             return Ok(list);
         }
 
+        [HttpGet("{leagueId:int}")]
+        public async Task<IActionResult> GetByLeagueId(int leagueId)
+        {
+            var list = await _db.Leagues.Where(l => l.LeagueId == leagueId)
+                                        .OrderBy(l => l.Level)
+                                        .FirstOrDefaultAsync();
+            return Ok(list);
+        }
+
+        [HttpGet("Level/{level:int}")]
+        public async Task<IActionResult> GetByLevel(int level)
+        {
+            var list = await _db.Leagues.Where(l => l.Level == level)
+                                        .OrderBy(l => l.Level)
+                                        .ToListAsync();
+            return Ok(list);
+        }
+
     }
 }

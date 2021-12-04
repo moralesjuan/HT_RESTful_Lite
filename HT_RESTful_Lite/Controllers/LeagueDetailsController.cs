@@ -27,10 +27,10 @@ namespace HT_RESTful_Lite.Controllers
             return Ok(list);
         }
 
-        [HttpGet("{LeagueId:int}")]
-        public async Task<IActionResult> GetBy(int LeagueId)
+        [HttpGet("{leagueId:int}")]
+        public async Task<IActionResult> GetBy(int leagueId)
         {
-            var list = await _db.LeagueDetails.Where(l => l.LeagueId == LeagueId)
+            var list = await _db.LeagueDetails.Where(l => l.LeagueId == leagueId)
                                               .Include(l => l.League)
                                               .Include(l => l.Team)
                                               .OrderByDescending(l => l.Points)
