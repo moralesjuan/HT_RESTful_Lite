@@ -9,17 +9,17 @@ namespace HT_RESTful_Lite.Controllers
     [ApiController]
     public class LeagueDetailsController : ControllerBase
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ApplicationDbContext _context;
 
-        public LeagueDetailsController(ApplicationDbContext db)
+        public LeagueDetailsController(ApplicationDbContext context)
         {
-            _db = db;
+            _context = context;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var list = await _db.LeagueDetails.OrderBy(l => l.League.Level)
+            var list = await _context.LeagueDetails.OrderBy(l => l.League.Level)
                                               .ThenBy(l => l.League.Series)
                                               .Include(l => l.League)
                                               .Include(l => l.Team)
@@ -30,7 +30,7 @@ namespace HT_RESTful_Lite.Controllers
         [HttpGet("{leagueId:int}")]
         public async Task<IActionResult> GetBy(int leagueId)
         {
-            var list = await _db.LeagueDetails.Where(l => l.LeagueId == leagueId)
+            var list = await _context.LeagueDetails.Where(l => l.LeagueId == leagueId)
                                               .Include(l => l.League)
                                               .Include(l => l.Team)
                                               .OrderByDescending(l => l.Points)

@@ -8,17 +8,17 @@ namespace HT_RESTful_Lite.Controllers
     [ApiController]
     public class LeaguesController : ControllerBase
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ApplicationDbContext _context;
 
-        public LeaguesController(ApplicationDbContext db)
+        public LeaguesController(ApplicationDbContext context)
         {
-            _db = db;
+            _context = context;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var list = await _db.Leagues.OrderBy(l => l.Level)
+            var list = await _context.Leagues.OrderBy(l => l.Level)
                                         .ToListAsync();
             return Ok(list);
         }
@@ -26,7 +26,7 @@ namespace HT_RESTful_Lite.Controllers
         [HttpGet("{leagueId:int}")]
         public async Task<IActionResult> GetByLeagueId(int leagueId)
         {
-            var list = await _db.Leagues.Where(l => l.LeagueId == leagueId)
+            var list = await _context.Leagues.Where(l => l.LeagueId == leagueId)
                                         .OrderBy(l => l.Level)
                                         .FirstOrDefaultAsync();
             return Ok(list);
@@ -35,7 +35,7 @@ namespace HT_RESTful_Lite.Controllers
         [HttpGet("Level/{level:int}")]
         public async Task<IActionResult> GetByLevel(int level)
         {
-            var list = await _db.Leagues.Where(l => l.Level == level)
+            var list = await _context.Leagues.Where(l => l.Level == level)
                                         .OrderBy(l => l.Level)
                                         .ToListAsync();
             return Ok(list);

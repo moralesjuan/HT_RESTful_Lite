@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HT_RESTful_Lite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211129022316_CreacionDeTablas")]
-    partial class CreacionDeTablas
+    [Migration("20211205011934_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,6 +22,56 @@ namespace HT_RESTful_Lite.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("HT_RESTful_Lite.Entities.CupDetails", b =>
+                {
+                    b.Property<int>("CupId")
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
+
+                    b.Property<int>("Round")
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    b.Property<int>("LocalTeamId")
+                        .HasColumnType("int")
+                        .HasColumnOrder(2);
+
+                    b.Property<int>("VisitorTeamId")
+                        .HasColumnType("int")
+                        .HasColumnOrder(3);
+
+                    b.Property<int>("Winner")
+                        .HasColumnType("int");
+
+                    b.HasKey("CupId", "Round", "LocalTeamId", "VisitorTeamId");
+
+                    b.ToTable("CupDetails");
+                });
+
+            modelBuilder.Entity("HT_RESTful_Lite.Entities.Cups", b =>
+                {
+                    b.Property<int>("CupId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CupId"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CupId");
+
+                    b.ToTable("Cups");
+                });
 
             modelBuilder.Entity("HT_RESTful_Lite.Entities.LeagueDetails", b =>
                 {
@@ -87,6 +137,17 @@ namespace HT_RESTful_Lite.Migrations
                     b.HasKey("TeamId");
 
                     b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("HT_RESTful_Lite.Entities.CupDetails", b =>
+                {
+                    b.HasOne("HT_RESTful_Lite.Entities.Cups", "Cup")
+                        .WithMany()
+                        .HasForeignKey("CupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cup");
                 });
 
             modelBuilder.Entity("HT_RESTful_Lite.Entities.LeagueDetails", b =>

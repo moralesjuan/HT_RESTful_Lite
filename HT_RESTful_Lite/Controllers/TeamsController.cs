@@ -9,17 +9,17 @@ namespace HT_RESTful_Lite.Controllers
     public class TeamsController : ControllerBase
     {
 
-        private readonly ApplicationDbContext _db;
+        private readonly ApplicationDbContext _context;
 
-        public TeamsController(ApplicationDbContext db)
+        public TeamsController(ApplicationDbContext context)
         {
-            _db = db;
+            _context = context;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var list = await _db.Teams.OrderBy(t => t.TeamId)
+            var list = await _context.Teams.OrderBy(t => t.TeamId)
                                       .ToListAsync();
             return Ok(list);
         }

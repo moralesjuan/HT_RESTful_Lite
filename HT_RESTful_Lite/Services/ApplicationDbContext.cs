@@ -12,10 +12,14 @@ namespace HT_RESTful_Lite.Services
         public DbSet<LeagueDetails> LeagueDetails { get; set; }
         public DbSet<Teams> Teams { get; set; }
         public DbSet<Leagues> Leagues { get; set; }
+        public DbSet<Cups> Cups { get; set; }
+        public DbSet<CupDetails> CupDetails { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<LeagueDetails>()
                 .HasKey(c => new { c.LeagueId, c.TeamId });
+            modelBuilder.Entity<CupDetails>()
+                .HasKey(c => new { c.CupId, c.Round, c.LocalTeamId, c.VisitorTeamId });
         }
     }
 }

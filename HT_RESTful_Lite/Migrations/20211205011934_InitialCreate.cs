@@ -4,10 +4,25 @@
 
 namespace HT_RESTful_Lite.Migrations
 {
-    public partial class CreacionDeTablas : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Cups",
+                columns: table => new
+                {
+                    CupId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Size = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cups", x => x.CupId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Leagues",
                 columns: table => new
@@ -33,6 +48,27 @@ namespace HT_RESTful_Lite.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Teams", x => x.TeamId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CupDetails",
+                columns: table => new
+                {
+                    CupId = table.Column<int>(type: "int", nullable: false),
+                    Round = table.Column<int>(type: "int", nullable: false),
+                    LocalTeamId = table.Column<int>(type: "int", nullable: false),
+                    VisitorTeamId = table.Column<int>(type: "int", nullable: false),
+                    Winner = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CupDetails", x => new { x.CupId, x.Round, x.LocalTeamId, x.VisitorTeamId });
+                    table.ForeignKey(
+                        name: "FK_CupDetails_Cups_CupId",
+                        column: x => x.CupId,
+                        principalTable: "Cups",
+                        principalColumn: "CupId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,7 +108,13 @@ namespace HT_RESTful_Lite.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CupDetails");
+
+            migrationBuilder.DropTable(
                 name: "LeagueDetails");
+
+            migrationBuilder.DropTable(
+                name: "Cups");
 
             migrationBuilder.DropTable(
                 name: "Leagues");
